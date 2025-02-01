@@ -1,12 +1,18 @@
 // src/app/[locale]/page.tsx
 interface PageProps {
-  params: {
-    locale: string
-  }
+  params: Promise<{ locale: string }>
 }
 
-export default function Page({ params }: PageProps) {
-  const isArabic = params.locale === 'ar'
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const locales = ['en', 'ar']
+  return locales.map((locale) => ({ locale }))
+}
+
+export default async function Page({ params }: PageProps) {
+  const { locale } = await params
+  const isArabic = locale === 'ar'
   
   return (
     <main className="flex-1">

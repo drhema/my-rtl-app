@@ -17,3 +17,16 @@ bun dev
 
 rm -rf .next
 npm run build
+
+
+
+# Clean everything
+rm -rf .next
+rm -rf node_modules
+rm package-lock.json
+
+# Fresh install
+npm install
+
+# Build
+npm run build

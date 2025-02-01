@@ -6,13 +6,12 @@ import { DirectionProvider } from '@/components/rtl/DirectionProvider'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
-export default function LocalizedContent({
-  locale,
-  children
-}: {
-  locale: string
+interface LocalizedContentProps {
   children: React.ReactNode
-}) {
+  locale: string
+}
+
+export function LocalizedContent({ children, locale }: LocalizedContentProps) {
   return (
     <ThemeProvider
       attribute="data-theme"
