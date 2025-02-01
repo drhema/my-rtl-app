@@ -1,0 +1,26 @@
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-primary: var(--font-inter);
+  --font-arabic: var(--font-noto-sans-arabic);
+}
+
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+
+[dir="ltr"] {
+  font-family: var(--font-primary);
+}
+
+/* Add some base styles */
+body {
+  @apply bg-base-100 text-base-content;
+}
+
+.container {
+  @apply max-w-7xl mx-auto;
+}
