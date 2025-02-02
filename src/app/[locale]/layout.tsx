@@ -1,23 +1,19 @@
 // src/app/[locale]/layout.tsx
 import { Noto_Sans_Arabic } from 'next/font/google'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from '@/components/theme/ThemeProvider'
-import { DirectionProvider } from '@/components/rtl/DirectionProvider'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import { LocalizedContent } from './LocalizedContent'
+import Script from 'next/script'
+import { GTM_ID, initDataLayer } from '@/lib/gtm'
 import '@/styles/globals.css'
 
-// Font configuration
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-primary',
-  display: 'swap',
 })
 
 const arabicFont = Noto_Sans_Arabic({
   subsets: ['arabic'],
   variable: '--font-arabic',
-  display: 'swap',
 })
 
 export const dynamicParams = false
@@ -29,7 +25,7 @@ export function generateStaticParams() {
   ]
 }
 
-export default function LocaleLayout({
+export default function Layout({
   children,
   params: { locale }
 }: {
@@ -38,20 +34,46 @@ export default function LocaleLayout({
 }) {
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        {GTM_ID && (
+          <>
+            <Script
+              id="gtm-script"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                  })(window,document,'script','dataLayer','${GTM_ID}');
+                `,
+              }}
+            />
+            <Script
+              id="gtm-data-layer"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: initDataLayer(),
+              }}
+            />
+          </>
+        )}
+      </head>
       <body className={`min-h-screen flex flex-col ${inter.variable} ${arabicFont.variable}`}>
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-          storageKey="app-theme"
-        >
-          <DirectionProvider locale={locale}>
-            <Header locale={locale} />
-            {children}
-            <Footer locale={locale} />
-          </DirectionProvider>
-        </ThemeProvider>
+        {GTM_ID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
+        <LocalizedContent locale={locale}>
+          {children}
+        </LocalizedContent>
       </body>
     </html>
   )

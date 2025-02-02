@@ -5,6 +5,11 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   
+  // Skip if already on a locale path
+  if (pathname.startsWith('/en') || pathname.startsWith('/ar')) {
+    return NextResponse.next()
+  }
+  
   // Get user's preferred language from Accept-Language header
   const acceptLanguage = request.headers.get('accept-language')
   let defaultLocale = 'en'
@@ -22,11 +27,8 @@ export function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    // Skip all internal paths (_next, api)
-    // Skip all files with extensions (.jpg, .png, etc)
     '/((?!_next|api|.*\\.[^/]*$).*)',
   ],
 }
