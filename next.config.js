@@ -11,12 +11,14 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Ensure trailing slashes are handled consistently
-  trailingSlash: false,
-  // Disable unnecessary features for Cloudflare
+  // Disable unnecessary features
   poweredByHeader: false,
   // Enable compression
   compress: true,
+  // Required for Cloudflare Pages
+  env: {
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'
+  }
 }
 
 module.exports = nextConfig

@@ -29,5 +29,8 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.1.6"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }
