@@ -1,10 +1,7 @@
 [build]
 command = "npm run build"
-pages_build_output_dir = ".next"
+output_dir = "out"
 
 [build.environment]
 NODE_VERSION = "18.18.0"
 NPM_VERSION = "9.6.7"
-
-[site]
-bucket = ".next"
