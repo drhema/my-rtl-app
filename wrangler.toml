@@ -1,7 +1,6 @@
-[build]
-command = "npm run build"
-output_dir = "out"
+name = "my-rtl-app"
+compatibility_date = "2024-02-02"
+compatibility_flags = ["nodejs_compat"]
 
-[build.environment]
-NODE_VERSION = "18.18.0"
-NPM_VERSION = "9.6.7"
+[build]
+command = "npm run pages:build"

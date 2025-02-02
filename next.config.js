@@ -1,17 +1,17 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  output: 'standalone',
   images: {
     unoptimized: true,
   },
+  // Required for Cloudflare Pages
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  trailingSlash: true,
-  basePath: '',
+  }
 }
 
 module.exports = nextConfig

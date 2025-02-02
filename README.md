@@ -30,3 +30,17 @@ npm install
 
 # Build
 npm run build
+
+
+
+# Clean everything first
+rm -rf .next
+rm -rf node_modules
+rm -rf .vercel
+rm package-lock.json
+
+# Install dependencies
+npm install
+
+# Run the deployment
+npm run deploy
