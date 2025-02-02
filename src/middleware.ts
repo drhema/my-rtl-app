@@ -4,10 +4,19 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+  
+  // Get user's preferred language from Accept-Language header
+  const acceptLanguage = request.headers.get('accept-language')
+  let defaultLocale = 'en'
+  
+  // Check if Arabic is preferred
+  if (acceptLanguage?.toLowerCase().includes('ar')) {
+    defaultLocale = 'ar'
+  }
 
-  // If accessing the root, redirect to /en/
+  // If accessing the root, redirect to detected language
   if (pathname === '/') {
-    return NextResponse.redirect(new URL('/en/', request.url))
+    return NextResponse.redirect(new URL(`/${defaultLocale}/`, request.url))
   }
 
   return NextResponse.next()
@@ -16,12 +25,8 @@ export function middleware(request: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    // Skip all internal paths (_next, api)
+    // Skip all files with extensions (.jpg, .png, etc)
+    '/((?!_next|api|.*\\.[^/]*$).*)',
   ],
 }

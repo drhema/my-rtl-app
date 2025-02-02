@@ -2,6 +2,7 @@ name = "mycompanyrtl"
 compatibility_date = "2024-02-02"
 compatibility_flags = ["nodejs_compat"]
 
+# Build configuration
 [build]
 command = "npm run pages:build"
 
@@ -9,5 +10,11 @@ command = "npm run pages:build"
 NODE_VERSION = "18.18.0"
 NPM_VERSION = "9.8.0"
 
+# Pages configuration
 [site]
 bucket = ".vercel/output/static"
+pages_build_output_dir = ".vercel/output/static"
+
+# KV Namespace bindings
+# [kv_namespaces]
+# YOUR_KV_NAMESPACE = { binding = "YOUR_KV_NAMESPACE", id = "xxx" }

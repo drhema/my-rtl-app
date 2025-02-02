@@ -1,9 +1,15 @@
-// 3. src/components/layout/Header.tsx
+// src/components/layout/Header.tsx
 'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ThemeToggle } from '@/components/theme/ThemeToggle'
+import dynamic from 'next/dynamic'
+
+// Dynamically import theme toggle
+const ThemeToggle = dynamic(() => import('@/components/theme/ThemeToggle'), {
+  ssr: false,
+  loading: () => <div className="w-10 h-10" /> // Placeholder
+})
 
 export default function Header({ locale }: { locale: string }) {
   const pathname = usePathname()

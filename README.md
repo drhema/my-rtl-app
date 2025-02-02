@@ -181,3 +181,12 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - [DaisyUI](https://daisyui.com)
 - [Tailwind CSS](https://tailwindcss.com)
 ```
+npm run build
+
+
+
+rm -rf .next
+rm -rf node_modules
+rm package-lock.json
+npm install
+npm run deploy

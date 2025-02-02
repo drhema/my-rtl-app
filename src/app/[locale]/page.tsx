@@ -2,23 +2,32 @@
 export const runtime = 'edge'
 export const dynamicParams = false
 
+import { Suspense } from 'react'
+import dynamic from 'next/dynamic'
+
+// Only import what's needed
+const MainContent = dynamic(() => import('./MainContent'), {
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-24 bg-gray-200 rounded w-3/4 mx-auto mb-4" />
+      <div className="h-8 bg-gray-200 rounded w-1/2 mx-auto" />
+    </div>
+  )
+})
+
 export default function Page({ params }: { params: { locale: string } }) {
-  const isArabic = params.locale === 'ar'
-  
   return (
-    <main className="flex-1">
-      <section className="container mx-auto px-4 py-12">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-6">
-            {isArabic ? 'مرحباً بكم في موقعنا' : 'Welcome to Our Website'}
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {isArabic 
-              ? 'نحن نقدم حلولاً مبتكرة لمستقبل رقمي أفضل'
-              : 'We provide innovative solutions for a better digital future'}
-          </p>
+    <Suspense fallback={
+      <div className="flex-1">
+        <div className="container mx-auto px-4 py-12">
+          <div className="animate-pulse">
+            <div className="h-24 bg-gray-200 rounded w-3/4 mx-auto mb-4" />
+            <div className="h-8 bg-gray-200 rounded w-1/2 mx-auto" />
+          </div>
         </div>
-      </section>
-    </main>
+      </div>
+    }>
+      <MainContent locale={params.locale} />
+    </Suspense>
   )
 }
