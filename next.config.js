@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',  // Changed from 'standalone' to 'export'
   images: {
     unoptimized: true,
     domains: ['*'],
@@ -15,10 +15,10 @@ const nextConfig = {
   poweredByHeader: false,
   // Enable compression
   compress: true,
-  // Required for Cloudflare Pages
-  env: {
-    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'
-  }
+  // Handle trailing slashes consistently
+  trailingSlash: false,
+  // Ensure basePath is set correctly for Cloudflare Pages
+  basePath: '',
 }
 
 module.exports = nextConfig
