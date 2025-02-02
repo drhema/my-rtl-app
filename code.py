@@ -2,8 +2,8 @@ import os
 from html import escape
 
 # Specify files and folders to exclude
-EXCLUDED_FILES = {"package-lock.json", ".gitignore", "webpack-runtime.js", "trace"}
-EXCLUDED_FOLDERS = {"node_modules", ".git", ".astro", ".vscode", ".DS_Store", "cache", "app", "static", "server", "build", ".next"}
+EXCLUDED_FILES = {"package-lock.json", ".gitignore", "webpack-runtime.js", "trace", "next.svg", "globe.svg", "window.svg", "file.svg"}
+EXCLUDED_FOLDERS = {"node_modules", ".git", ".astro", ".vscode", ".DS_Store", "cache", "out", "static", "docs", "build", ".next", ".vercel"}
 
 def generate_file_tree_html(base_dir):
     html_content = ["<html><head><style>"]

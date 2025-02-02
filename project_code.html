@@ -6,6 +6,10 @@
         .content { margin-left: 40px; white-space: pre-wrap; font-family: monospace; color: black; border-left: 2px solid #ddd; padding-left: 10px; }
     </style></head><body><h1>Project Files</h1>
     
+<div class="file" style="margin-left: 0px;">📄 .nvmrc</div>
+<div class="content">18.18.0</div>
+<div class="folder" style="margin-left: 0px;">📁 .wrangler</div>
+<div class="folder" style="margin-left: 20px;">📁 tmp</div>
 <div class="file" style="margin-left: 0px;">📄 README.md</div>
 <div class="content">This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -38,23 +42,65 @@ rm package-lock.json
 npm install
 
 # Build
-npm run build</div>
+npm run build
+
+
+
+# Clean everything first
+rm -rf .next
+rm -rf node_modules
+rm -rf .vercel
+rm package-lock.json
+
+# Install dependencies
+npm install
+
+# Run the deployment
+npm run deploy</div>
+<div class="file" style="margin-left: 0px;">📄 _headers</div>
+<div class="content">/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: origin-when-cross-origin
+  
+/en/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: origin-when-cross-origin
+
+/ar/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: origin-when-cross-origin</div>
 <div class="file" style="margin-left: 0px;">📄 _routes.json</div>
 <div class="content">{
   &quot;version&quot;: 1,
   &quot;include&quot;: [&quot;/*&quot;],
   &quot;exclude&quot;: [
     &quot;/api/*&quot;,
-    &quot;/_next/static/*&quot;
+    &quot;/_next/static/*&quot;,
+    &quot;/favicon.ico&quot;
   ]
 }</div>
+<div class="file" style="margin-left: 0px;">📄 _worker.js</div>
+<div class="content">export default {
+    async fetch(request, env) {
+      try {
+        const url = new URL(request.url);
+        const response = await fetch(url.toString(), request);
+        return response;
+      } catch (e) {
+        return new Response(&#x27;Error loading page&#x27;, { status: 500 });
+      }
+    },
+  };</div>
 <div class="file" style="margin-left: 0px;">📄 code.py</div>
 <div class="content">import os
 from html import escape
 
 # Specify files and folders to exclude
-EXCLUDED_FILES = {&quot;package-lock.json&quot;, &quot;.gitignore&quot;, &quot;webpack-runtime.js&quot;, &quot;trace&quot;}
-EXCLUDED_FOLDERS = {&quot;node_modules&quot;, &quot;.git&quot;, &quot;.astro&quot;, &quot;.vscode&quot;, &quot;.DS_Store&quot;, &quot;cache&quot;, &quot;app&quot;, &quot;static&quot;, &quot;server&quot;, &quot;build&quot;, &quot;.next&quot;}
+EXCLUDED_FILES = {&quot;package-lock.json&quot;, &quot;.gitignore&quot;, &quot;webpack-runtime.js&quot;, &quot;trace&quot;, &quot;next.svg&quot;, &quot;globe.svg&quot;, &quot;window.svg&quot;, &quot;file.svg&quot;}
+EXCLUDED_FOLDERS = {&quot;node_modules&quot;, &quot;.git&quot;, &quot;.astro&quot;, &quot;.vscode&quot;, &quot;.DS_Store&quot;, &quot;cache&quot;, &quot;out&quot;, &quot;static&quot;, &quot;docs&quot;, &quot;build&quot;, &quot;.next&quot;, &quot;.vercel&quot;}
 
 def generate_file_tree_html(base_dir):
     html_content = [&quot;&lt;html&gt;&lt;head&gt;&lt;style&gt;&quot;]
@@ -130,12 +176,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Required for Cloudflare Pages
   typescript: {
-    // We&#x27;ll handle types properly in development
     ignoreBuildErrors: true,
   },
   eslint: {
-    // We&#x27;ll handle linting separately
     ignoreDuringBuilds: true,
   }
 }
@@ -146,37 +191,42 @@ module.exports = nextConfig</div>
   &quot;name&quot;: &quot;my-rtl-app&quot;,
   &quot;version&quot;: &quot;0.1.0&quot;,
   &quot;private&quot;: true,
+  &quot;engines&quot;: {
+    &quot;node&quot;: &quot;^18.18.0&quot;,
+    &quot;npm&quot;: &quot;^9.8.0&quot;
+  },
   &quot;scripts&quot;: {
     &quot;dev&quot;: &quot;next dev&quot;,
     &quot;build&quot;: &quot;next build&quot;,
-    &quot;deploy&quot;: &quot;next build &amp;&amp; next export&quot;,
     &quot;start&quot;: &quot;next start&quot;,
-    &quot;lint&quot;: &quot;next lint&quot;
+    &quot;lint&quot;: &quot;next lint&quot;,
+    &quot;pages:build&quot;: &quot;npx @cloudflare/next-on-pages&quot;,
+    &quot;pages:deploy&quot;: &quot;npx wrangler pages deploy .vercel/output/static&quot;,
+    &quot;deploy&quot;: &quot;npm run pages:build &amp;&amp; npm run pages:deploy&quot;
   },
   &quot;dependencies&quot;: {
-    &quot;critters&quot;: &quot;^0.0.23&quot;,
-    &quot;daisyui&quot;: &quot;^4.12.23&quot;,
-    &quot;lucide-react&quot;: &quot;^0.474.0&quot;,
     &quot;next&quot;: &quot;15.1.6&quot;,
-    &quot;next-intl&quot;: &quot;^3.26.3&quot;,
-    &quot;next-themes&quot;: &quot;^0.4.4&quot;,
-    &quot;react&quot;: &quot;^19.0.0&quot;,
-    &quot;react-dom&quot;: &quot;^19.0.0&quot;,
-    &quot;tailwindcss-rtl&quot;: &quot;^0.9.0&quot;
+    &quot;react&quot;: &quot;^18&quot;,
+    &quot;react-dom&quot;: &quot;^18&quot;,
+    &quot;next-themes&quot;: &quot;^0.2.1&quot;,
+    &quot;lucide-react&quot;: &quot;^0.263.1&quot;,
+    &quot;tailwindcss&quot;: &quot;^3.3.0&quot;,
+    &quot;tailwindcss-rtl&quot;: &quot;^0.9.0&quot;,
+    &quot;daisyui&quot;: &quot;^4.4.24&quot;
   },
   &quot;devDependencies&quot;: {
-    &quot;@eslint/eslintrc&quot;: &quot;^3&quot;,
+    &quot;@cloudflare/next-on-pages&quot;: &quot;^1.8.5&quot;,
     &quot;@types/node&quot;: &quot;^20&quot;,
-    &quot;@types/react&quot;: &quot;^19&quot;,
-    &quot;@types/react-dom&quot;: &quot;^19&quot;,
-    &quot;eslint&quot;: &quot;^9&quot;,
+    &quot;@types/react&quot;: &quot;^18&quot;,
+    &quot;@types/react-dom&quot;: &quot;^18&quot;,
+    &quot;autoprefixer&quot;: &quot;^10.0.1&quot;,
+    &quot;eslint&quot;: &quot;^8&quot;,
     &quot;eslint-config-next&quot;: &quot;15.1.6&quot;,
     &quot;postcss&quot;: &quot;^8&quot;,
-    &quot;tailwindcss&quot;: &quot;^3.4.1&quot;,
-    &quot;typescript&quot;: &quot;^5&quot;
+    &quot;typescript&quot;: &quot;^5&quot;,
+    &quot;wrangler&quot;: &quot;^3.28.1&quot;
   }
-}
-</div>
+}</div>
 <div class="file" style="margin-left: 0px;">📄 postcss.config.mjs</div>
 <div class="content">/** @type {import(&#x27;postcss-load-config&#x27;).Config} */
 const config = {
@@ -188,10 +238,6 @@ const config = {
 export default config;
 </div>
 <div class="folder" style="margin-left: 0px;">📁 public</div>
-<div class="file" style="margin-left: 20px;">📄 file.svg</div>
-<div class="content">&lt;svg fill=&quot;none&quot; viewBox=&quot;0 0 16 16&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path d=&quot;M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z&quot; clip-rule=&quot;evenodd&quot; fill=&quot;#666&quot; fill-rule=&quot;evenodd&quot;/&gt;&lt;/svg&gt;</div>
-<div class="file" style="margin-left: 20px;">📄 globe.svg</div>
-<div class="content">&lt;svg fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;g clip-path=&quot;url(#a)&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; clip-rule=&quot;evenodd&quot; d=&quot;M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1&quot; fill=&quot;#666&quot;/&gt;&lt;/g&gt;&lt;defs&gt;&lt;clipPath id=&quot;a&quot;&gt;&lt;path fill=&quot;#fff&quot; d=&quot;M0 0h16v16H0z&quot;/&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;/svg&gt;</div>
 <div class="folder" style="margin-left: 20px;">📁 locales</div>
 <div class="folder" style="margin-left: 40px;">📁 ar</div>
 <div class="file" style="margin-left: 60px;">📄 common.json</div>
@@ -206,13 +252,150 @@ export default config;
     &quot;description&quot;: &quot;This is a Next.js app with RTL support&quot;
   }
   </div>
-<div class="file" style="margin-left: 20px;">📄 next.svg</div>
-<div class="content">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; fill=&quot;none&quot; viewBox=&quot;0 0 394 80&quot;&gt;&lt;path fill=&quot;#000&quot; d=&quot;M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z&quot;/&gt;&lt;path fill=&quot;#000&quot; d=&quot;M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z&quot;/&gt;&lt;/svg&gt;</div>
 <div class="file" style="margin-left: 20px;">📄 vercel.svg</div>
 <div class="content">&lt;svg fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 1155 1000&quot;&gt;&lt;path d=&quot;m577.3 0 577.4 1000H0z&quot; fill=&quot;#fff&quot;/&gt;&lt;/svg&gt;</div>
-<div class="file" style="margin-left: 20px;">📄 window.svg</div>
-<div class="content">&lt;svg fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; clip-rule=&quot;evenodd&quot; d=&quot;M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5&quot; fill=&quot;#666&quot;/&gt;&lt;/svg&gt;</div>
 <div class="folder" style="margin-left: 0px;">📁 src</div>
+<div class="folder" style="margin-left: 20px;">📁 app</div>
+<div class="folder" style="margin-left: 40px;">📁 [locale]</div>
+<div class="file" style="margin-left: 60px;">📄 LocalizedContent.tsx</div>
+<div class="content">// src/app/[locale]/LocalizedContent.tsx
+&#x27;use client&#x27;
+
+import { ThemeProvider } from &#x27;@/components/theme/ThemeProvider&#x27;
+import { DirectionProvider } from &#x27;@/components/rtl/DirectionProvider&#x27;
+import Header from &#x27;@/components/layout/Header&#x27;
+import Footer from &#x27;@/components/layout/Footer&#x27;
+
+interface LocalizedContentProps {
+  children: React.ReactNode
+  locale: string
+}
+
+export function LocalizedContent({ children, locale }: LocalizedContentProps) {
+  return (
+    &lt;ThemeProvider
+      attribute=&quot;data-theme&quot;
+      defaultTheme=&quot;system&quot;
+      enableSystem
+      disableTransitionOnChange
+      storageKey=&quot;app-theme&quot;
+    &gt;
+      &lt;DirectionProvider locale={locale}&gt;
+        &lt;Header locale={locale} /&gt;
+        {children}
+        &lt;Footer locale={locale} /&gt;
+      &lt;/DirectionProvider&gt;
+    &lt;/ThemeProvider&gt;
+  )
+}</div>
+<div class="file" style="margin-left: 60px;">📄 layout.tsx</div>
+<div class="content">// src/app/[locale]/layout.tsx
+import { Noto_Sans_Arabic } from &#x27;next/font/google&#x27;
+import { Inter } from &#x27;next/font/google&#x27;
+import { LocalizedContent } from &#x27;./LocalizedContent&#x27;
+import &#x27;@/styles/globals.css&#x27;
+
+const inter = Inter({
+  subsets: [&#x27;latin&#x27;],
+  variable: &#x27;--font-primary&#x27;,
+})
+
+const arabicFont = Noto_Sans_Arabic({
+  subsets: [&#x27;arabic&#x27;],
+  variable: &#x27;--font-arabic&#x27;,
+})
+
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const locales = [&#x27;en&#x27;, &#x27;ar&#x27;]
+  return locales.map((locale) =&gt; ({ locale }))
+}
+
+interface LayoutProps {
+  children: React.ReactNode
+  params: Promise&lt;{ locale: string }&gt;
+}
+
+export default async function Layout({ children, params }: LayoutProps) {
+  const { locale } = await params
+
+  return (
+    &lt;html lang={locale} suppressHydrationWarning&gt;
+      &lt;body className={`min-h-screen flex flex-col ${inter.variable} ${arabicFont.variable}`}&gt;
+        &lt;LocalizedContent locale={locale}&gt;
+          {children}
+        &lt;/LocalizedContent&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}</div>
+<div class="file" style="margin-left: 60px;">📄 page.tsx</div>
+<div class="content">// src/app/[locale]/page.tsx
+export const runtime = &#x27;edge&#x27;
+export const dynamicParams = false
+
+export default function Page({ params }: { params: { locale: string } }) {
+  const isArabic = params.locale === &#x27;ar&#x27;
+  
+  return (
+    &lt;main className=&quot;flex-1&quot;&gt;
+      &lt;section className=&quot;container mx-auto px-4 py-12&quot;&gt;
+        &lt;div className=&quot;text-center mb-16&quot;&gt;
+          &lt;h1 className=&quot;text-5xl font-bold mb-6&quot;&gt;
+            {isArabic ? &#x27;مرحباً بكم في موقعنا&#x27; : &#x27;Welcome to Our Website&#x27;}
+          &lt;/h1&gt;
+          &lt;p className=&quot;text-xl text-gray-600 max-w-2xl mx-auto&quot;&gt;
+            {isArabic 
+              ? &#x27;نحن نقدم حلولاً مبتكرة لمستقبل رقمي أفضل&#x27;
+              : &#x27;We provide innovative solutions for a better digital future&#x27;}
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/main&gt;
+  )
+}</div>
+<div class="file" style="margin-left: 40px;">📄 favicon.ico</div>
+<div class="content">[Error reading file: 'utf-8' codec can't decode byte 0x96 in position 50: invalid start byte]</div>
+<div class="file" style="margin-left: 40px;">📄 globals.css</div>
+<div class="content">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+</div>
+<div class="file" style="margin-left: 40px;">📄 layout.tsx</div>
+<div class="content">// src/app/layout.tsx
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return children
+}</div>
+<div class="file" style="margin-left: 40px;">📄 page.tsx</div>
+<div class="content">// src/app/page.tsx
+import { redirect } from &#x27;next/navigation&#x27;
+
+export default function Page() {
+  redirect(&#x27;/en&#x27;)
+}</div>
 <div class="folder" style="margin-left: 20px;">📁 components</div>
 <div class="folder" style="margin-left: 40px;">📁 layout</div>
 <div class="file" style="margin-left: 60px;">📄 Footer.tsx</div>
@@ -382,17 +565,26 @@ import type { NextRequest } from &#x27;next/server&#x27;
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  
-  // If it&#x27;s the root path, redirect to English version
+
+  // If accessing the root, redirect to /en/
   if (pathname === &#x27;/&#x27;) {
-    return NextResponse.redirect(new URL(&#x27;/en&#x27;, request.url))
+    return NextResponse.redirect(new URL(&#x27;/en/&#x27;, request.url))
   }
 
   return NextResponse.next()
 }
 
+// See &quot;Matching Paths&quot; below to learn more
 export const config = {
-  matcher: [&#x27;/((?!_next|api|favicon.ico).*)&#x27;]
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    &#x27;/((?!_next/static|_next/image|favicon.ico).*)&#x27;,
+  ],
 }</div>
 <div class="folder" style="margin-left: 20px;">📁 styles</div>
 <div class="file" style="margin-left: 40px;">📄 globals.css</div>
@@ -423,9 +615,9 @@ body {
   @apply max-w-7xl mx-auto;
 }</div>
 <div class="file" style="margin-left: 0px;">📄 tailwind.config.ts</div>
-<div class="content">// tailwind.config.js
-/** @type {import(&#x27;tailwindcss&#x27;).Config} */
-module.exports = {
+<div class="content">import type { Config } from &#x27;tailwindcss&#x27;
+
+const config: Config = {
   content: [
     &#x27;./src/pages/**/*.{js,ts,jsx,tsx,mdx}&#x27;,
     &#x27;./src/components/**/*.{js,ts,jsx,tsx,mdx}&#x27;,
@@ -436,13 +628,14 @@ module.exports = {
   },
   plugins: [
     require(&#x27;daisyui&#x27;),
-    require(&#x27;tailwindcss-rtl&#x27;),
+    require(&#x27;tailwindcss-rtl&#x27;)
   ],
   daisyui: {
     themes: [&quot;light&quot;, &quot;dark&quot;],
   },
 }
-</div>
+
+export default config</div>
 <div class="file" style="margin-left: 0px;">📄 tsconfig.json</div>
 <div class="content">{
   &quot;compilerOptions&quot;: {
@@ -472,4 +665,18 @@ module.exports = {
   &quot;include&quot;: [&quot;next-env.d.ts&quot;, &quot;**/*.ts&quot;, &quot;**/*.tsx&quot;, &quot;.next/types/**/*.ts&quot;],
   &quot;exclude&quot;: [&quot;node_modules&quot;]
 }</div>
+<div class="file" style="margin-left: 0px;">📄 wrangler.toml</div>
+<div class="content">name = &quot;mycompanyrtl&quot;
+compatibility_date = &quot;2024-02-02&quot;
+compatibility_flags = [&quot;nodejs_compat&quot;]
+
+[build]
+command = &quot;npm run pages:build&quot;
+
+[build.environment]
+NODE_VERSION = &quot;18.18.0&quot;
+NPM_VERSION = &quot;9.8.0&quot;
+
+[site]
+bucket = &quot;.vercel/output/static&quot;</div>
 </body></html>
