@@ -1,18 +1,17 @@
-// src/middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname
-  
-  // If it's the root path, redirect to English version
+  const pathname = request.nextUrl.pathname;
+
+  // Redirect root path to /en
   if (pathname === '/') {
-    return NextResponse.redirect(new URL('/en', request.url))
+    return NextResponse.redirect(new URL('/en', request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon.ico).*)']
-}
+  matcher: ['/((?!_next|api|favicon.ico).*)'],
+};
