@@ -1,6 +1,11 @@
 export default {
     async fetch(request, env) {
-      const url = new URL(request.url);
-      return fetch(url.toString(), request);
-    }
+      try {
+        const url = new URL(request.url);
+        const response = await fetch(url.toString(), request);
+        return response;
+      } catch (e) {
+        return new Response('Error loading page', { status: 500 });
+      }
+    },
   };
